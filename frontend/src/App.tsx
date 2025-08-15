@@ -1,8 +1,36 @@
-import React from 'react'
+import Home from './Pages/Home'
+import Navbar from './components/Navbar'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Courses from './Pages/Courses'
+import Login from './Pages/auth/Login'
+import Signup from './Pages/auth/Signup'
+import Footer from './components/Footer'
 
+
+const router= createBrowserRouter([
+  {
+    path:'/',
+    element: <><Navbar/><Home/></>
+  },
+  {
+    path: '/courses',
+    element: <><Navbar/><Courses/></>
+  },
+  {
+    path:'/login',
+    element: <><Navbar/><Login/></>
+  },
+  {
+    path:'/signup',
+    element: <><Navbar/><Signup/></>
+  },
+])
 const App = () => {
   return (
-    <div>hello</div>
+    <>
+    <RouterProvider router={router}/>
+    <Footer/>
+    </>
   )
 }
 
