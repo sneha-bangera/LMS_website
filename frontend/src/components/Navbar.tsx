@@ -2,9 +2,13 @@ import { GraduationCap } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 const Navbar = () => {
-  const user: boolean = false;
+
+  const { user } = useSelector((store: any) => store.auth);
+  // const user: boolean = false;
 
   return (
     <div className="bg-gray-900 top-0 w-full fixed z-50 px-5 py-3">
@@ -32,10 +36,12 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-7">
+                <Link to="/profile">
                 <Avatar>
                   <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
+                </Link>
                 <Button className="bg-blue-500 hover:bg-blue-600">Logout</Button>
               </div>
             )}

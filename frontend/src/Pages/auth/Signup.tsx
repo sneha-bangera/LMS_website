@@ -1,11 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { RadioGroup } from '@/components/ui/radio-group'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Signup = () => {
+
+    const navigate= useNavigate();
 
     const [user,setUser] = useState({
         name: '',
@@ -22,10 +26,33 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     }));
 };
 
-const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+const handleSubmit = async(e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // Handle form submission logic here
     console.log('User data:', user);
+    try {
+        const response= await axios.post('http://localhost:3000/api/v1/user/register', user, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        if(response.data.success){
+            navigate('/login');
+            toast.success(response.data.message);
+        }
+        else{
+            toast.error("Registration failed. Please try again.");
+        }
+        
+    } catch (error:any) {
+        if (error.response) {
+            console.log("Error Response:", error.response.data);
+            toast.error(error.response.data.message || "Registration failed");
+        } else {
+            console.log("Error:", error.message);
+        }
+    }
 };
 
   return (
