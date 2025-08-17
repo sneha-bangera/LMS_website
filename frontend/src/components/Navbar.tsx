@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 const Navbar = () => {
 
   const { user } = useSelector((store: any) => store.auth);
-  // const user: boolean = false;
 
   return (
     <div className="bg-gray-900 top-0 w-full fixed z-50 px-5 py-3">
