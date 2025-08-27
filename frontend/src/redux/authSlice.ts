@@ -2,7 +2,7 @@ import { createSlice} from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-    user: any | null; // Replace 'any' with your User type if available
+    user: any | null;
 }
 
 const initialState: AuthState = {
@@ -13,7 +13,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<any | null>) => { // Replace 'any' with your User type if available
+        setUser: (state, action: PayloadAction<any | null>) => { 
             state.user = action.payload;
         }
     }

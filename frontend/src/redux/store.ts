@@ -4,7 +4,7 @@ import {
     persistReducer,
     FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'; 
 
 const persistConfig= {
     key: 'root',
@@ -26,7 +26,7 @@ const store = configureStore({
         }),
 });
 
-// Optional: Export RootState and AppDispatch types for use throughout your app
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

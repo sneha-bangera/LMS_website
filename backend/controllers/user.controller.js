@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../utils/cludinary.js";
 
 export const register = async(req, res)=> {
     try {
@@ -68,6 +70,40 @@ export const logout = async(_, res)=> {
             success: true, 
             message: "Logout successful" 
         });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({success: false, message: "Internal server error" });
+    }
+}
+
+export const updateProfile= async(req, res) => {
+    try {
+        const userId= req._id
+        const {name, description} = req.body
+        const file= req.file
+
+        const fileUri = getDataUri(file)
+        let cloudResponse = await cloudinary.uploader.upload(fileUri)
+        const user = await User.findById(userId)
+        if(!user){
+            return res.status(404).json({
+                message:"user not found",
+                success: false
+            })
+        }
+
+        //updating data
+        if(name) user.name= name
+        if(description) user.description = description
+        if(file) user.photoUrl = cloudResponse.secure_url
+
+        await user.save()
+        return res.status(200).json({
+            message:"profile updated successfully",
+            success: true,
+            user
+        })
+        
     } catch (error) {
         console.log(error);
         return res.status(500).json({success: false, message: "Internal server error" });

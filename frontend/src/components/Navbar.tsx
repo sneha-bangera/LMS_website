@@ -2,12 +2,30 @@ import { GraduationCap } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { setUser } from '@/redux/authSlice';
+import { toast } from 'sonner';
 
 
 const Navbar = () => {
 
+  const dispatch = useDispatch();
+
   const { user } = useSelector((store: any) => store.auth);
+
+  const logoutHandler = async() => {
+    try {
+      const res= await axios.get('http://localhost:3000/api/v1/user/logout', {withCredentials: true});
+      if (res.data.success) {
+        dispatch(setUser(null));
+        toast.success('Logout successful');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Logout failed');
+    }
+  }
 
   return (
     <div className="bg-gray-900 top-0 w-full fixed z-50 px-5 py-3">
@@ -41,7 +59,7 @@ const Navbar = () => {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 </Link>
-                <Button className="bg-blue-500 hover:bg-blue-600">Logout</Button>
+                <Button onClick={logoutHandler} className="bg-blue-500 hover:bg-blue-600">Logout</Button>
               </div>
             )}
           </ul>

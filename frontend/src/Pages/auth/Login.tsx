@@ -36,7 +36,7 @@ const Login = () => {
         });
         if(response.data.success){
             navigate('/');
-            dispatch(setUser({ user: response.data.user }));
+            dispatch(setUser(response.data.user));
             toast.success(response.data.message);
         }
         else{
