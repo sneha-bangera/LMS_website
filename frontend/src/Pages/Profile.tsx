@@ -7,70 +7,124 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { setUser } from '@/redux/authSlice'
+import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
 
-const Profil = () => {
-  // const { user } = useSelector((store: any) => store.auth);
-  const user = useSelector((store: any) => store.auth.user);
-
-  console.log(user)
+const Profile = () => {
+  const dispatch = useDispatch()
+  const user = useSelector((store: any) => store.auth.user)
 
   const [input, setInput] = useState({
     name: '',
     description: '',
-    file: ''
-  });
+    file: null as File | null
+  })
+  const [preview, setPreview] = useState<string>("")
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (user) {
       setInput({
         name: user.name || '',
         description: user.description || '',
-        file: user.photoUrl || ''
-      });
+        file: null,
+      })
+      setPreview(user.photoUrl || "")
     }
-  }, [user]);
+  }, [user])
 
   // Handle text inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
+    setInput({ ...input, [e.target.name]: e.target.value })
+  }
 
   // Handle file input
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setInput({ ...input, file: URL.createObjectURL(e.target.files[0]) });
+      const file = e.target.files[0]
+      setInput({ ...input, file })
+      setPreview(URL.createObjectURL(file)) // show preview
     }
-  };
+  }
+
+  // Submit handler
+  const sumbitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    console.log("Submitting: ", input)
+
+    const formData = new FormData()
+    formData.append("name", input.name)
+    formData.append("description", input.description)
+    if (input.file) {
+      formData.append("file", input.file) // send actual file
+    }
+
+    try {
+      setLoading(true)
+      const res = await axios.put(
+        'http://localhost:3000/api/v1/user/profile/update',
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      )
+        console.log("API Response:", res.data)  // 👈 add this
+
+      if (res.data.success) {
+        setOpen(false)
+        toast.success(res.data.message)
+        dispatch(setUser(res.data.user))
+      } else {
+        toast.error("Something went wrong")
+      }
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error.response?.data?.message || "Update failed")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className=" bg-gray-100 py-12 px-4 lg:px-0">
       <div className="flex max-w-6xl mx-auto p-8 bg-white shadow-xl rounded-2xl mt-14">
         <div className="flex flex-col items-center md:flex-row md:items-start space-y-8 md:space-y-0 md:space-x-12">
-          
+
           {/* profile pic */}
           <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
-            <img src={user.user?.photoUrl || UserLogo} alt="Profile" className="w-full h-full object-cover"/>
+            <img
+              src={preview || UserLogo}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* user info */}
           <div className='text-center md:text-left ml-10'>
             {user ? (
               <>
-                <h1 className='text-4xl font-bold text-blue-500'>Welcome, {user.user.name}</h1>
+                <h1 className='text-4xl font-bold text-blue-500'>
+                  Welcome, {user.name}
+                </h1>
                 <p className=' text-gray-600 mt-3'>
-                  <span className='font-bold'>Email: </span>{user.user.email}
+                  <span className='font-bold'>Email: </span>{user.email}
                 </p>
                 <p className='text-gray-600 my-1 capitalize'>
-                  <span className='font-bold'>Role: </span>{user.user.nstructor}
+                  <span className='font-bold'>Role: </span>{user.role}
                 </p>
                 <p className='text-gray-700 text-base leading-relaxed mb-3'>
-                  <span className='font-bold'>Bio: </span>{user.user.description || "Add your bio"}
+                  <span className='font-bold'>Bio: </span>{user.description || "Add your bio"}
                 </p>
               </>
             ) : (
@@ -78,10 +132,8 @@ const Profil = () => {
             )}
 
             {/* Edit Profile Dialog */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className='bg-blue-500'>Edit Profile</Button>
-              </DialogTrigger>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <Button onClick={() => setOpen(true)} className='bg-blue-500'>Edit Profile</Button>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle className='text-center'>Edit profile</DialogTitle>
@@ -118,11 +170,26 @@ const Profil = () => {
                       name="file"
                       onChange={handleFileChange}
                     />
+                    {preview && (
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="w-20 h-20 rounded-full object-cover mt-2"
+                      />
+                    )}
                   </div>
                 </div>
 
                 <DialogFooter>
-                  <Button className='bg-blue-500'>Save changes</Button>
+                  {loading ? (
+                    <Button className='bg-blue-400'>
+                      <Loader2 className='mr-2 w-4 h-4 animate-spin' /> Please wait...
+                    </Button>
+                  ) : (
+                    <Button onClick={sumbitHandler} className='bg-blue-500'>
+                      Save changes
+                    </Button>
+                  )}
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -133,4 +200,4 @@ const Profil = () => {
   )
 }
 
-export default Profil
+export default Profile

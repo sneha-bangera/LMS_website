@@ -78,13 +78,14 @@ export const logout = async(_, res)=> {
 
 export const updateProfile= async(req, res) => {
     try {
-        const userId= req._id
+        const userId= req.id
         const {name, description} = req.body
         const file= req.file
 
         const fileUri = getDataUri(file)
         let cloudResponse = await cloudinary.uploader.upload(fileUri)
-        const user = await User.findById(userId)
+
+        const user = await User.findById(userId).select('-password')
         if(!user){
             return res.status(404).json({
                 message:"user not found",
