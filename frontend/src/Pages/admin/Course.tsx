@@ -66,7 +66,7 @@ const Course = () => {
                 <img
                   src={course?.courseThumbnail}
                   alt="Thumbnail"
-                  className="w-12 h-12 object-cover rounded"
+                  className="w-12 object-cover rounded md:block"
                 />
                 {course.courseTitle}
               </TableCell>

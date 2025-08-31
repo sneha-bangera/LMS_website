@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+// import React, { useState } from 'react';
+// import ReactQuill from 'react-quill-new';
+// import 'react-quill-new/dist/quill.snow.css';
 
-const RichTextEditor=()=> {
-  const [value, setValue] = useState('');
+// const RichTextEditor=({input, setInput})=> {
 
-  return <ReactQuill theme="snow" value={value} onChange={setValue} />;
+//   const handleChange= (content)=> {
+//     setInput({...input, description:content})
+//   }
+//   return <ReactQuill theme="snow" value={input.description} onChange={handleChange} />;
+// }
+
+// export default RichTextEditor
+
+import React from "react";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
+interface RichTextEditorProps {
+  input: {
+    description: string;
+    [key: string]: any;
+  };
+  setInput: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default RichTextEditor
+const RichTextEditor: React.FC<RichTextEditorProps> = ({ input, setInput }) => {
+  const handleChange = (content: string) => {
+    setInput({ ...input, description: content });
+  };
+
+  return (
+    <ReactQuill
+      theme="snow"
+      value={input.description}
+      onChange={handleChange}
+    />
+  );
+};
+
+export default RichTextEditor;
