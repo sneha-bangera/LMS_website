@@ -12,6 +12,7 @@ import Course from './Pages/admin/Course'
 import CreateCourse from './Pages/admin/CreateCourse'
 import UpdateCourse from './Pages/admin/UpdateCourse'
 import CreateLec from './Pages/admin/CreateLec'
+import EditLec from './Pages/admin/EditLec'
 
 
 const router= createBrowserRouter([
@@ -58,6 +59,10 @@ const router= createBrowserRouter([
       {
         path: "course/:courseId/lecture",
         element: <CreateLec/>
+      },
+      {
+        path: "course/:courseId/lecture/:lectureId",
+        element: <EditLec/>
       },
     ]
   },

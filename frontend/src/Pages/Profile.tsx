@@ -64,7 +64,7 @@ const Profile = () => {
     formData.append("name", input.name)
     formData.append("description", input.description)
     if (input.file) {
-      formData.append("file", input.file) // send actual file
+      formData.append("file", input.file) 
     }
 
     try {
@@ -101,7 +101,6 @@ const Profile = () => {
       <div className="flex max-w-6xl mx-auto p-8 bg-white shadow-xl rounded-2xl mt-14">
         <div className="flex flex-col items-center md:flex-row md:items-start space-y-8 md:space-y-0 md:space-x-12">
 
-          {/* profile pic */}
           <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
             <img
               src={preview || UserLogo}
@@ -110,7 +109,6 @@ const Profile = () => {
             />
           </div>
 
-          {/* user info */}
           <div className='text-center md:text-left ml-10'>
             {user ? (
               <>
@@ -131,7 +129,6 @@ const Profile = () => {
               <h1 className='text-2xl font-bold text-gray-600'>Loading profile...</h1>
             )}
 
-            {/* Edit Profile Dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
               <Button onClick={() => setOpen(true)} className='bg-blue-500'>Edit Profile</Button>
               <DialogContent className="sm:max-w-[425px]">

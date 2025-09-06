@@ -9,7 +9,6 @@ export interface CourseType {
   courseThumbnail: string;
 }
 
-// initial state is just an array
 const initialState: CourseType[] = [];
 
 const courseSlice = createSlice({
@@ -17,7 +16,7 @@ const courseSlice = createSlice({
   initialState,
   reducers: {
     setCourse: (_state, action: PayloadAction<CourseType[]>) => {
-      return action.payload; // replace state with new array
+      return action.payload; 
     },
   },
 });

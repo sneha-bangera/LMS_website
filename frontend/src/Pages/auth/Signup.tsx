@@ -28,7 +28,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 const handleSubmit = async(e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
+    // Handle form submit
     console.log('User data:', user);
     try {
         const response= await axios.post('http://localhost:3000/api/v1/user/register', user, {

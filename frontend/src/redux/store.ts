@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authSlice from "./authSlice.ts";
 import courseSlice from "./courseSlice.ts";
-
+import lectureSlice from './lecSlice.ts'
 import {
   persistReducer,
   persistStore,
@@ -14,17 +14,17 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-// ✅ Persist only auth, not course
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["auth"], // only persist auth slice
+  whitelist: ["auth"], // only persist auth 
 };
 
 const rootReducer = combineReducers({
   auth: authSlice,
-  course: courseSlice, // not persisted
+  course: courseSlice, 
+  lecture: lectureSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
