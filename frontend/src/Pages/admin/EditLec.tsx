@@ -17,7 +17,7 @@ const EditLec = () => {
                 <h1 className='font-bold text-xl'>Update Your Lectures</h1>
             </div>
         </div>
-        {/* <LecTab/> */}
+        <LecTab/>
     </div>
   )
 }

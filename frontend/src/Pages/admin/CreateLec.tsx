@@ -21,8 +21,12 @@ const CreateLec = () => {
 
     const createLecHandler= async()=> {
         try {
+            if (!lectureTitle.trim()) {
+                toast.error("Lecture title cannot be empty!");
+                return;
+            }
             setLoading(true)
-            const res= await axios.post(`http://localhost:3000/api/v1/course/${params?.courseId}/lecture`, {lectureTitle}, {
+            const res= await axios.post(`http://localhost:3000/api/v1/course/${params?.courseId}/lecture`, {lecTitle:lectureTitle}, {
                 headers:{
                     "Content-Type": "application/json"
                 },

@@ -1,7 +1,7 @@
-import express from 'expree'
-import { singleUpload } from '../middleware/multer'
-import getDataUri from '../utils/dataUri'
-import cloudinary from '../utils/cludinary'
+import express from 'express'
+import { singleUpload } from '../middleware/multer.js'
+import getDataUri from '../utils/dataUri.js'
+import cloudinary from '../utils/cludinary.js'
 
 const router= express.Router()
 
@@ -25,3 +25,5 @@ router.route('/upload-video').post(singleUpload, async(req , res)=> {
         })
     }
 })
+
+export default router

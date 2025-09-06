@@ -97,7 +97,7 @@ export const editCourse= async(req,res)=> {
         let courseThumbnail
         if(file){
             const fileUri = getDataUri(file)
-            console.log("File URI =>", fileUri.substring(0,50)); // 🐞 debug
+            console.log("File URI =>", fileUri.substring(0,50)); 
 
             const uploaded= await cloudinary.uploader.upload(fileUri)
             courseThumbnail = uploaded.secure_url
@@ -209,6 +209,7 @@ export const getCourseLec= async(req,res)=> {
 
 export const editLec= async(req,res)=> {
     try {
+        const {lecTitle, videoInfo, isPreviewFree}=  req.body
         const {courseId, lectureId}= req.params
         const lecture= await Lecture.findById(lectureId)
         if(!lecture){
@@ -216,7 +217,7 @@ export const editLec= async(req,res)=> {
                 message:"Lec not fond"
             })
         }
-        if(lectureTitle) lecture.lectureTitle= lectureTitle
+        if(lecTitle) lecture.lecTitle= lecTitle
         if(videoInfo?.videoUrl) lecture.videoUrl = videoInfo.videoUrl
         if(videoInfo?.publicId) lecture.publicId = videoInfo.publicId
         lecture.isPreviewFree= isPreviewFree
@@ -247,10 +248,11 @@ export const editLec= async(req,res)=> {
 export const removeLec= async(req,res)=> {
     try {
         const {lectureId}= req.params
-        const lecture= await Course.findByIdAndDelete(lectureId)
+        const lecture= await Lecture.findByIdAndDelete(lectureId)
         if(!lecture){
             return res.status(400).json({
-                message:"Lec not fond"
+                message:"Lec not found",
+                success:false
             })
         }
         await Course.updateOne(
