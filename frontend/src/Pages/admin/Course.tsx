@@ -16,7 +16,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import type { RootState } from "@/redux/store"
-import type { CourseType } from "@/redux/courseSlice"
+// import type { CourseType } from "@/redux/courseSlice"
 
 const Course = () => {
 

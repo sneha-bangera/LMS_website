@@ -1,8 +1,30 @@
-import { courses } from './Courses'
 import Hero from '@/components/Hero'
 import CourseCard from '@/components/CourseCard'
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCourse } from '@/redux/courseSlice';
+import  { type RootState } from '@/redux/store';
 
 const Home = () => {
+
+  const dispatch = useDispatch()
+  const course= useSelector((store:RootState)=> store.course)
+  useEffect(()=> {
+    const getAllPublishedCourse= async()=> {
+      try {
+        const res= await axios.get(`http://localhost:3000/api/v1/course/published-courses`, {withCredentials:true})
+        if(res.data.success){
+          dispatch(setCourse(res.data.courses))
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    getAllPublishedCourse()
+  })
+
   return (
     <>
     <Hero/>
@@ -12,7 +34,7 @@ const Home = () => {
     </div>
     <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6'>
       {
-      courses.slice(0,5).map((course, index)=> {
+      course.slice(0,5).map((course, index)=> {
         return <CourseCard course={course} key={index}/>
       })
     }

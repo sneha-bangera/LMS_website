@@ -33,15 +33,26 @@ const CourseTab = () => {
 
   const [loading, setLoading] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(selectCourse || null)
+  const [publish, setPublish]= useState(false)
 
-  const [input, setInput] = useState({
-    courseTitle: selectedCourse?.courseTitle || "",
-    subTitle: (selectedCourse as any)?.subTitle || "",
-    description: (selectedCourse as any)?.description || "",
-    category: (selectedCourse as any)?.category || "",
-    courseLevel: (selectedCourse as any)?.courseLevel || "",
-    coursePrice: selectedCourse?.coursePrice || 0,
-    courseThumbnail: "" as any
+  
+  interface CourseInput {
+  courseTitle: string;
+  subTitle: string;
+  description: string;
+  category: string;
+  courseLevel: string;
+  coursePrice: number;
+  courseThumbnail: File | string;
+  }
+  const [input, setInput] = useState<CourseInput>({
+    courseTitle: selectedCourse?.courseTitle ?? "",
+    subTitle: selectedCourse?.subTitle ?? "",
+    description: selectedCourse?.description ?? "",
+    category: selectedCourse?.category ?? "",
+    courseLevel: selectedCourse?.courseLevel ?? "",
+    coursePrice: selectedCourse?.coursePrice ?? 0,
+    courseThumbnail: ""
   })
 
   const [previewThumbnail, setPreviewThumbnail] = useState<string | undefined>(selectedCourse?.courseThumbnail)
@@ -127,6 +138,24 @@ const CourseTab = () => {
     }
   }
 
+  const togglePublishUnpublish= async(action: string)=>{
+    try {
+      const res= await axios.patch(`http://localhost:3000/api/v1/course/${id}`, {
+        params: {
+          action,
+        },
+        withCredentials: true
+      })
+      if(res.data.success){
+        setPublish(!publish)
+        toast.success(res.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   return (
     <Card>
       <CardHeader className="flex md:flex-row justify-between">
@@ -136,7 +165,7 @@ const CourseTab = () => {
         </div>
 
         <div className="space-x-2">
-          <Button className="bg-gray-800">Publish</Button>
+          <Button onClick={()=>togglePublishUnpublish(selectCourse?.isPublished ? "false" : "true")} className="bg-gray-800">{selectCourse?.isPublished ? "UnPublish" : "Publish"}</Button>
           <Button variant="destructive">Remove Course</Button>
         </div>
       </CardHeader>
