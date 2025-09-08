@@ -1,9 +1,9 @@
-import store from "@/redux/store"
+import type { RootState } from "@/redux/store"
 import { useSelector } from "react-redux"
 
 const Dashboard = () => {
 
-  const user = useSelector((store: any) => store.auth.user)
+  const user = useSelector((store: RootState) => store.auth.user)
   return (
     <div>
         <div className="flex md:h-screen bg-gray-100">

@@ -37,8 +37,9 @@ const CourseTab = () => {
 
   
   interface CourseInput {
+  // _id: string;
   courseTitle: string;
-  subTitle: string;
+  subtitle: string;
   description: string;
   category: string;
   courseLevel: string;
@@ -47,7 +48,7 @@ const CourseTab = () => {
   }
   const [input, setInput] = useState<CourseInput>({
     courseTitle: selectedCourse?.courseTitle ?? "",
-    subTitle: selectedCourse?.subTitle ?? "",
+    subtitle: selectedCourse?.subtitle ?? "",
     description: selectedCourse?.description ?? "",
     category: selectedCourse?.category ?? "",
     courseLevel: selectedCourse?.courseLevel ?? "",
@@ -64,7 +65,7 @@ const CourseTab = () => {
         setSelectedCourse(res.data.course)
         setInput({
           courseTitle: res.data.course.courseTitle,
-          subTitle: res.data.course.subTitle,
+          subtitle: res.data.course.subtitle,
           description: res.data.course.description,
           category: res.data.course.category,
           courseLevel: res.data.course.courseLevel,
@@ -108,7 +109,7 @@ const CourseTab = () => {
   const updateCourseHandler = async () => {
     const formData = new FormData()
     formData.append("courseTitle", input.courseTitle)
-    formData.append("subTitle", input.subTitle)
+    formData.append("subtitle", input.subtitle)
     formData.append("description", input.description)
     formData.append("category", input.category)
     formData.append("courseLevel", input.courseLevel)
@@ -179,7 +180,7 @@ const CourseTab = () => {
 
           <div>
             <Label>Subtitle</Label>
-            <Input value={input.subTitle ?? ""} onChange={changeEventHandler} type="text" name="subTitle" placeholder="Ex. Become a Fullstack Developer from zero to hero in 2 months" />
+            <Input value={input.subtitle ?? ""} onChange={changeEventHandler} type="text" name="subtitle" placeholder="Ex. Become a Fullstack Developer from zero to hero in 2 months" />
           </div>
 
           <div>
@@ -233,12 +234,13 @@ const CourseTab = () => {
               <Input value={input.coursePrice ?? 0} onChange={changeEventHandler} type="number" name="coursePrice" placeholder="199" className="w-fit" />
             </div>
 
-            <div>
+            
+          </div>
+          <div>
               <Label>Course Thumbnail</Label>
-              <Input onChange={selectThumbnail} type="file" id="file" accept="image/*" />
+              <Input onChange={selectThumbnail} type="file" id="file" accept="image/*" className="w-64"/>
               {previewThumbnail && <img src={previewThumbnail} alt="Thumbnail" className="w-64 my-2" />}
             </div>
-          </div>
 
           <div className="flex gap-2">
             <Button onClick={() => navigate("/admin/course")} variant="outline">Cancel</Button>

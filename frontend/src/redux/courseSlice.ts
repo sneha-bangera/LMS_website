@@ -6,7 +6,16 @@ export interface CourseType {
   courseTitle: string;
   coursePrice?: number;
   isPublished: boolean;
-  courseThumbnail: string;
+  courseThumbnail:  string;
+  subtitle: string;
+  category: string;
+  courseLevel: string;
+  description: string;
+  creator: {
+    name: string;
+    photoUrl: string;
+    description?: string;
+  };
 }
 
 const initialState: CourseType[] = [];

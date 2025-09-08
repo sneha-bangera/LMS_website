@@ -83,7 +83,7 @@ export const getCreatedCourses = async(req, res)=> {
 export const editCourse= async(req,res)=> {
     try {
         const {courseId}= req.params
-        const {courseTitle, subTitle, description, category, courseLevel, coursePrice}= req.body
+        const {courseTitle, subtitle, description, category, courseLevel, coursePrice}= req.body
         const file= req.file
 
         let course = await Course.findById(courseId).populate('lectures')
@@ -104,7 +104,7 @@ export const editCourse= async(req,res)=> {
 
         }
 
-        const updateData= {courseTitle, subTitle, description, category, courseLevel, coursePrice, }
+        const updateData= {courseTitle, subtitle, description, category, courseLevel, coursePrice, }
         if(courseThumbnail){
             updateData.courseThumbnail= courseThumbnail
         }
